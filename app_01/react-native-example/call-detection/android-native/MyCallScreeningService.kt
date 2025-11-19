@@ -22,12 +22,9 @@ class MyCallScreeningService : CallScreeningService() {
 
         if (phoneNumber != null) {
             Log.d(TAG, "Incoming call from: $phoneNumber")
-
-            // React Native로 전화번호 전송
-            onIncomingCall?.invoke(phoneNumber)
         }
 
-        // 전화를 허용 (스크리닝만 하고 차단하지 않음)
+        // ⚡ 중요: 먼저 즉시 응답을 보내서 타임아웃 방지!
         val response = CallResponse.Builder()
             .setDisallowCall(false)  // 전화 허용
             .setRejectCall(false)    // 거부하지 않음
@@ -36,5 +33,12 @@ class MyCallScreeningService : CallScreeningService() {
             .build()
 
         respondToCall(callDetails, response)
+
+        // 응답 후 React Native로 전화번호 전송 (비동기)
+        if (phoneNumber != null) {
+            android.os.Handler(android.os.Looper.getMainLooper()).post {
+                onIncomingCall?.invoke(phoneNumber)
+            }
+        }
     }
 }
