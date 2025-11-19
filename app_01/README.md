@@ -11,14 +11,16 @@ app_01/
 ├── README.md                    # 이 파일
 ├── docs/                        # 📚 상세 문서
 │   ├── API_INSTALLATION_GUIDE.md    # 서버 설치 가이드
-│   └── PROJECT_STATUS.md            # 프로젝트 진행 상황
+│   ├── PROJECT_STATUS.md            # 프로젝트 진행 상황
+│   └── UBUNTU_DEV_SETUP.md          # 🆕 우분투 개발 환경 설정 가이드 (초보자용)
 ├── server/                      # 🚀 서버에 업로드할 파일
 │   ├── app_login_api.php            # 로그인 API
 │   ├── get_consultants_api.php      # 컨설턴트 목록 API
 │   └── search_candidate_api.php     # 후보자 검색 API (핵심!)
 └── tools/                       # 🔧 테스트 도구
     ├── api_test.html                # 브라우저 테스트 도구
-    └── search_candidate_api_debug.php   # 디버그용 API
+    ├── search_candidate_api_debug.php   # 디버그용 API
+    └── check_dev_environment.sh     # 🆕 개발 환경 체크 스크립트
 ```
 
 ---
@@ -128,6 +130,7 @@ include_once '../../common.php';  // 두 단계 위
 더 자세한 정보는 `docs/` 폴더 참고:
 - **API_INSTALLATION_GUIDE.md** - 서버 설치 상세 가이드
 - **PROJECT_STATUS.md** - 프로젝트 전체 진행 상황
+- **UBUNTU_DEV_SETUP.md** - 🆕 우분투 개발 환경 설정 가이드 (초보자용)
 
 ---
 
@@ -143,10 +146,31 @@ include_once '../../common.php';  // 두 단계 위
 
 백엔드 API 테스트가 성공하면:
 
-1. **모바일 앱 개발 시작** (React Native 또는 Flutter)
-2. **전화 감지 기능 추가**
-3. **오버레이 팝업 구현**
-4. **테스트 및 배포**
+### 🖥️ 우분투 노트북에서 앱 개발 시작
+
+**1단계: 개발 환경 체크**
+```bash
+# 개발 환경이 준비되었는지 확인
+cd app_01/tools
+./check_dev_environment.sh
+```
+
+**2단계: 개발 환경 설정**
+- `docs/UBUNTU_DEV_SETUP.md` 문서를 참고하여 단계별로 진행
+- Node.js, Android Studio, React Native 설치
+- 초보자도 쉽게 따라할 수 있도록 상세하게 작성됨
+
+**3단계: 앱 개발**
+1. **React Native 프로젝트 생성**
+2. **로그인 화면 구현**
+3. **후보자 검색 기능 연동**
+4. **전화 감지 기능 추가**
+5. **오버레이 팝업 구현**
+
+**4단계: 테스트 및 배포**
+- 실제 Android 폰에서 테스트
+- APK 빌드 및 배포
+- (선택) Google Play Store 출시
 
 ---
 
