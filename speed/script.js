@@ -265,8 +265,9 @@ var filterLabels = {
         // 검색 시에만 로딩 표시 활성화
         window.showLoadingOnSearch = true;
         $('#loading-overlay').show();
-        // 새로운 검색 시 페이지를 1로 초기화
+        // 새로운 검색 시 페이지를 1로 초기화하고 캐시 비우기
         $('#page').val(1);
+        $('#cached_total_count').val('');
         $('#rumiReload').click();
     }, 300));
 

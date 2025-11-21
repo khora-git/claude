@@ -323,6 +323,9 @@
             $('#page').val(1);
             currentPage = 1;
 
+            // cached_total_count도 비우기 (새로운 검색이므로)
+            $('#cached_total_count').val('');
+
             // 사용자 추가 리셋 코드 실행
             cfg.formReset();
 
