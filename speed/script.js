@@ -184,6 +184,9 @@ $(function() {
             $('#total-count').text(countText);
             $('#current-page').text(data.currentPage);
 
+            // cached_total_count에 저장 (2페이지 이상에서 재사용)
+            $('#cached_total_count').val(data.totalCount);
+
             // 선택된 필터 표시 업데이트
             updateSelectedFilters();
         },
@@ -262,6 +265,8 @@ var filterLabels = {
         // 검색 시에만 로딩 표시 활성화
         window.showLoadingOnSearch = true;
         $('#loading-overlay').show();
+        // 새로운 검색 시 페이지를 1로 초기화
+        $('#page').val(1);
         $('#rumiReload').click();
     }, 300));
 

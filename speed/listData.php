@@ -149,12 +149,21 @@ $from_record = ($page - 1) * $page_rows;
 $is_limited = false; // 제한된 카운트 여부 플래그
 $count_limit = 500; // 빠른 검색 시 카운트 제한 (500건까지만)
 
-// 빠른 검색 ON + 2페이지 이상 = COUNT 생략 (초간단 최적화!)
-if ($use_approximate_count && $page > 1) {
-    // COUNT 쿼리 아예 안 함! 고정값 사용
-    // 실제 데이터 조회 후 개수가 모자라면 그때 보정함
-    $total_count = $count_limit;
-    $is_limited = true;
+// 빠른 검색 ON + 2페이지 이상 + cached_total_count 있음
+if ($use_approximate_count && $page > 1 && isset($_REQUEST['cached_total_count']) && $_REQUEST['cached_total_count'] !== '') {
+    // 1페이지에서 계산된 값 재사용 (쿼리 실행 안함!)
+    $cached_count = intval($_REQUEST['cached_total_count']);
+
+    if ($cached_count >= $count_limit) {
+        // 500+ 였다면 계속 500 사용
+        $total_count = $count_limit;
+        $is_limited = true;
+    } else {
+        // 500 이하였다면 정확한 개수 사용
+        $total_count = $cached_count;
+        $is_limited = false;
+    }
+
 } else if ($use_approximate_count) {
     // 빠른 검색: 1페이지만 COUNT (LIMIT 501)
     $sql = " SELECT COUNT(*) AS cnt FROM (
@@ -162,13 +171,15 @@ if ($use_approximate_count && $page > 1) {
              ) AS limited_result ";
     $row = sql_fetch($sql);
     $actual_count = $row['cnt'];
-    
+
     if ($actual_count > $count_limit) {
         $total_count = $count_limit;
         $is_limited = true;
     } else {
         $total_count = $actual_count;
+        $is_limited = false;
     }
+
 } else {
     // 정확한 COUNT (빠른 검색 OFF)
     $sql = " SELECT COUNT(1) AS cnt FROM {$write_table} {$sql_search}";

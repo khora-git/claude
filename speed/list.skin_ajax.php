@@ -238,6 +238,7 @@ $is_personal = isset($_GET['wr_10']) && !empty($_GET['wr_10']);
                 <input type="hidden" name="bo_table" value="<?php echo $bo_table ?>">
                 <input type="hidden" name="sca" id="sca" value="<?php echo $sca ?>">
                 <input type="hidden" name="page" id="page" value="<?php echo $page ?>">
+                <input type="hidden" name="cached_total_count" id="cached_total_count" value="">
                 <!--<input type="hidden" name="sop" value="and">-->
 
 <input type="hidden" name="sst" id="sst" value="<?php echo $sst ?>">
