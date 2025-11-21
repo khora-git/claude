@@ -25,8 +25,7 @@ $(function() {
     // 로딩 표시 플래그 - 검색만 로딩 표시를 위한 변수
     window.showLoadingOnSearch = false;
 
-    // rumiPaging 인스턴스 저장
-    var rumiPagingInstance = $('#rumi-paging').rumiPaging({
+    $('#rumi-paging').rumiPaging({
         pagerID: '#rumi-paging',
         dataUrl: cfg.board_skin_url+'/listData.php?bo_table='+cfg.bo_table,
         formID: '#fsearch',
@@ -190,9 +189,6 @@ $(function() {
         },
     });
 
-    // 전역 접근을 위해 인스턴스 저장
-    window.rumiPagingInstance = rumiPagingInstance;
-
     // 선택된 필터 표시 업데이트 함수
     function updateSelectedFilters() {
         var filterContainer = $('#selected-filters');
@@ -266,12 +262,7 @@ var filterLabels = {
         // 검색 시에만 로딩 표시 활성화
         window.showLoadingOnSearch = true;
         $('#loading-overlay').show();
-        // 페이지를 1로 초기화
-        $('#page').val(1);
-        // rumiReload 대신 직접 rumiPaging의 검색 실행 (1페이지로 검색)
-        if (window.rumiPagingInstance) {
-            window.rumiPagingInstance.get_datalist(1, window.rumiPagingInstance.searchString());
-        }
+        $('#rumiReload').click();
     }, 300));
 
     // 엔터키 검색 - 디바운싱 적용
