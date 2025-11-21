@@ -151,10 +151,11 @@ $count_limit = 500; // 빠른 검색 시 카운트 제한 (500건까지만)
 
 // 빠른 검색 ON + 2페이지 이상 = COUNT 생략 (초간단 최적화!)
 if ($use_approximate_count && $page > 1) {
-    // COUNT 쿼리 아예 안 함! 고정값 사용
-    // 실제 데이터 조회 후 개수가 모자라면 그때 보정함
-    $total_count = $count_limit;
-    $is_limited = true;
+    // COUNT 쿼리 아예 안 함! 임시 고정값 사용 (나중에 보정됨)
+    // 실제 데이터 조회 후 개수가 모자라면 그때 정확히 보정함
+    $total_count = $count_limit; // 임시값
+    $is_limited = true; // 제한된 카운트 플래그
+    $needs_correction = true; // 보정 필요 플래그
 } else if ($use_approximate_count) {
     // 빠른 검색: 1페이지만 COUNT (LIMIT 501)
     $sql = " SELECT COUNT(*) AS cnt FROM (
@@ -196,14 +197,20 @@ while ($row = sql_fetch_array($result)) {
 }
 
 // [페이지네이션 보정 로직]
-// 빠른 검색이고 2페이지 이상일 때, 조회된 개수가 페이지당 목록 수보다 적으면
-// 여기가 마지막 페이지라는 뜻이므로 total_count를 역계산하여 수정
+// 빠른 검색이고 2페이지 이상일 때, 조회된 개수로 total_count를 보정
 if ($use_approximate_count && $page > 1) {
     $fetched_count = count($rows_buffer);
-    if ($fetched_count < $page_rows) {
-        // 실제 총 개수 = 이전 페이지까지의 개수 + 현재 조회된 개수
+
+    if ($fetched_count == 0) {
+        // 데이터가 없으면 이전 페이지가 마지막
+        $total_count = ($page - 1) * $page_rows;
+        $is_limited = false; // 정확한 값으로 보정됨
+    } else if ($fetched_count < $page_rows) {
+        // 페이지당 목록 수보다 적으면 여기가 마지막 페이지
         $total_count = ($page - 1) * $page_rows + $fetched_count;
+        $is_limited = false; // 정확한 값으로 보정됨
     }
+    // else: 정확한 total_count를 알 수 없으므로 $count_limit 유지
 }
 
 // 페이지 수 계산 (보정된 total_count 사용)

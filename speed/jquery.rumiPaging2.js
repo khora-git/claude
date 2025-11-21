@@ -103,6 +103,8 @@
             if (window.showLoadingOnSearch !== undefined) {
                 window.showLoadingOnSearch = true;
             }
+            // 페이지를 1로 명시적으로 초기화
+            $('#page').val(1);
             rumiThis.formReset();
         });
 
@@ -310,15 +312,19 @@
                 .val('')
                 .prop('checked', false)
                 .prop('selected', false);
-            
+
             $('select').find('option:first').prop('selected', true);
-            
+
+            // 페이지 번호를 1로 명시적으로 초기화
+            $('#page').val(1);
+            currentPage = 1;
+
             // 사용자 추가 리셋 코드 실행
             cfg.formReset();
-            
+
             // 캐시 비우기 추가 (수정된 부분)
             this.clearCache();
-            
+
             // 폼 초기화 후 1페이지로 이동
             rumiThis.get_datalist(1, rumiThis.searchString());
         };
