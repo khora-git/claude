@@ -332,6 +332,10 @@
             // 캐시 비우기 추가 (수정된 부분)
             this.clearCache();
 
+            // DOM 업데이트 강제 (체크박스 상태가 반영되도록)
+            // 브라우저가 DOM을 완전히 업데이트하도록 강제 리플로우 발생
+            $('#use_approx_count')[0].offsetHeight;
+
             // 폼 초기화 후 1페이지로 이동
             rumiThis.get_datalist(1, rumiThis.searchString());
         };

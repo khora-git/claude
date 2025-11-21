@@ -268,7 +268,15 @@ var filterLabels = {
         // 새로운 검색 시 페이지를 1로 초기화하고 캐시 비우기
         $('#page').val(1);
         $('#cached_total_count').val('');
-        $('#rumiReload').click();
+
+        // rumiReload 대신 직접 1페이지로 검색 (currentPage 변수 문제 해결)
+        if (window.rumiPagingInstance) {
+            window.rumiPagingInstance.clearCache();
+            window.rumiPagingInstance.get_datalist(1, window.rumiPagingInstance.searchString());
+        } else {
+            // fallback: rumiPagingInstance가 없으면 기존 방식 사용
+            $('#rumiReload').click();
+        }
     }, 300));
 
     // 엔터키 검색 - 디바운싱 적용
